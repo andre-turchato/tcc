@@ -62,6 +62,22 @@ Após a extração, os dados passaram por etapas de limpeza e transformação, u
 
 O fluxo completo do pipeline ETL é descrito no diagrama a seguir:
 
+#### 4.1.1 Implementação do Pipeline
+
+O pipeline ETL foi implementado na pasta `pipeline/` utilizando Python 3.10+, organizado em três módulos principais dentro do pacote `etl/`:
+
+**Extração (`etl/extractor.py` — RF-01):** Utiliza a biblioteca `pysus` para realizar o download automático dos arquivos `.dbc` do SIH/SUS diretamente do FTP do DATASUS, referentes ao estado do Paraná. O módulo aceita parâmetros de ano e mês de competência via linha de comando e retorna um `pandas.DataFrame` com os dados brutos.
+
+**Transformação (`etl/transformer.py` — RF-02, RF-03, RF-04):** Aplica três transformações sequenciais ao DataFrame bruto: (i) filtro dos registros pelo código IBGE do município de residência (`MUNIC_RES`), mantendo apenas os 42 municípios do Sudoeste do Paraná listados em `data/municipios_sudoeste.csv`; (ii) decodificação e classificação da idade bruta do SIH/SUS (que utiliza prefixo de unidade) em faixas etárias padronizadas (`0-10`, `11-20`, `21-30`, `31-40`, `41-50`, `51-60`, `61+`); e (iii) mapeamento do campo `DIAG_PRINC` (CID-10) para o capítulo correspondente em numeral romano (I a XXII), cobrindo todos os capítulos da Classificação Internacional de Doenças.
+
+**Carga (`etl/loader.py` — RF-05):** Conecta ao Supabase via `sqlalchemy` utilizando variáveis de ambiente configuradas no arquivo `.env`. Realiza o UPSERT dos municípios na tabela `municipios_sudoeste` e a inserção em lotes na tabela `internacoes`, registrando o progresso em log a cada lote processado.
+
+**Orquestração (`main.py`):** O script de entrada aceita argumentos `--ano` e `--mes` via CLI e executa as três etapas em sequência, registrando início, fim e total de registros processados. Exemplo de uso:
+
+```bash
+python main.py --ano 2023 --mes 6
+```
+
 ![Diagrama de Fluxo ETL](docs/diagrams/renders/fluxo_etl.png)
 
 > 📄 Código-fonte: [`docs/diagrams/fluxo_etl.puml`](docs/diagrams/fluxo_etl.puml)
