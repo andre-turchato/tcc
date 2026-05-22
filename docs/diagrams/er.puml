@@ -1,0 +1,36 @@
+@startuml er
+!theme cerulean-outline
+title Modelo Entidade-Relacionamento — Longevus
+
+entity "internacoes" as INT {
+  * id : SERIAL <<PK>>
+  --
+  * municipio_codigo : VARCHAR(7) <<FK>>
+  * idade : INTEGER
+  * sexo : CHAR(1)  /'M' ou 'F'/
+  * faixa_etaria : VARCHAR(10)
+  * cid_principal : VARCHAR(4)
+  * cid_capitulo : VARCHAR(5)
+  * valor_total : NUMERIC(12,2)
+  * ano_competencia : INTEGER
+  * mes_competencia : INTEGER
+}
+
+entity "municipios_sudoeste" as MUN {
+  * codigo_ibge : VARCHAR(7) <<PK>>
+  --
+  * nome : VARCHAR(100)
+  microrregiao : VARCHAR(100)
+}
+
+INT }o--|| MUN : "reside em"
+
+note right of INT
+  Índices:
+  - idx_internacoes_cid_capitulo
+  - idx_internacoes_sexo
+  - idx_internacoes_faixa_etaria
+  - idx_internacoes_municipio
+end note
+
+@enduml

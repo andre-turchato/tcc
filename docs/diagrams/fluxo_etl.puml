@@ -1,0 +1,29 @@
+@startuml fluxo_etl
+!theme cerulean-outline
+title Pipeline ETL — Longevus
+
+start
+
+:Download dos arquivos .dbc\ndo DATASUS (SIH/SUS - Paraná);
+
+:Conversão .dbc → DataFrame\n(biblioteca pysus);
+
+:Filtro: manter apenas\nmunicípios do Sudoeste do PR;
+
+if (Registros encontrados?) then (Sim)
+  :Criar coluna **faixa_etaria**\n(0-10, 11-20, ..., 61+);
+
+  :Agrupar CID-10\npor **capítulos** (I, II, IX, X...);
+
+  :Selecionar colunas:\nmunicípio, idade, sexo,\ncid_principal, cid_capitulo,\nvalor_total, competência;
+
+  :Carregar no Supabase\n(INSERT em `internacoes`);
+
+  :Log de sucesso;
+else (Não)
+  :Log de aviso:\nnenhum registro encontrado;
+endif
+
+stop
+
+@enduml

@@ -1,0 +1,46 @@
+@startuml jornada_usuario
+!theme cerulean-outline
+title Jornada do Usuário — Profissional de Saúde no Longevus
+
+|Usuário|
+|Sistema|
+
+|Usuário|
+start
+:Acessa o sistema Longevus\npelo navegador;
+
+|Sistema|
+:Carrega GeoJSON da\nmalha municipal;
+:Renderiza mapa inicial\ncom todos os dados;
+
+|Usuário|
+:Visualiza o mapa coroplético\ndo Sudoeste do PR;
+:Identifica que quer analisar\ndoenças respiratórias em idosos;
+
+:Seleciona filtros na Sidebar:
+- CID: X (Respiratório)
+- Sexo: Ambos
+- Faixa Etária: 61+;
+
+:Clica em "Atualizar Mapa";
+
+|Sistema|
+:Envia requisição para API\nGET /api/indicadores;
+:Retorna JSON com\ndados agregados por município;
+:Atualiza cores do mapa\n(escala amarelo → vermelho);
+
+|Usuário|
+:Observa concentração\nem municípios específicos;
+:Passa o mouse sobre\num município de interesse;
+
+|Sistema|
+:Exibe Tooltip:
+- Nome do município
+- Total de atendimentos
+- Valor total (R$);
+
+|Usuário|
+:Interpreta os dados\ne toma decisão;
+stop
+
+@enduml

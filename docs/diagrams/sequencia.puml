@@ -1,0 +1,36 @@
+@startuml sequencia
+!theme cerulean-outline
+title Fluxo de Requisição — Longevus (Online)
+
+actor "Profissional de Saúde" as USER
+participant "Frontend\n(React + Leaflet)" as FE
+participant "API\n(Fastify)" as API
+participant "Cache\n(node-cache)" as CACHE
+participant "Banco\n(Supabase)" as DB
+
+USER -> FE : Seleciona filtros\n(CID, Sexo, Faixa Etária)
+USER -> FE : Clica em "Atualizar Mapa"
+
+FE -> API : GET /api/indicadores\n?cid_capitulo=X&sexo=M&faixa_etaria=0-10
+
+API -> CACHE : Verifica chave\nindicadores:X:M:0-10
+
+alt Cache HIT
+  CACHE --> API : Retorna dados em cache
+else Cache MISS
+  API -> DB : SELECT agregado\n(municipio, total, valor)
+  DB --> API : Rows resultantes
+  API -> CACHE : Armazena resultado\n(TTL: 5 min)
+end
+
+API --> FE : JSON { dados: [...] }
+
+FE -> FE : Mapeia codigo_ibge\n→ feature GeoJSON
+FE -> FE : Aplica escala coroplética\n(amarelo → vermelho)
+
+FE --> USER : Mapa atualizado\n(< 2 segundos)
+
+USER -> FE : Passa mouse\nsobre município
+FE --> USER : Tooltip:\nNome | Atendimentos | Valor R$
+
+@enduml

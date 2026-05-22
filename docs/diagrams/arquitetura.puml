@@ -1,0 +1,34 @@
+@startuml arquitetura
+!theme cerulean-outline
+title Arquitetura do Sistema Longevus
+
+package "Fonte de Dados" {
+  [DATASUS\n(.dbc)] as DATASUS #LightYellow
+}
+
+package "Pipeline ETL" {
+  [Script Python\n(pysus + pandas)] as ETL #LightBlue
+}
+
+package "Banco de Dados" {
+  database "Supabase\n(PostgreSQL + PostGIS)" as DB #LightGreen
+}
+
+package "Backend" {
+  [API Node.js\nFastify + Cache] as API #LightSalmon
+}
+
+package "Frontend" {
+  [React + Vite\nLeaflet + TanStack Query] as FE #Lavender
+}
+
+actor "Profissional\nde Saúde" as USER
+
+DATASUS --> ETL : arquivos .dbc
+ETL --> DB : INSERT (dados transformados)
+DB --> API : SQL (queries agregadas)
+API --> FE : JSON (dados agregados)
+FE --> USER : Mapa Coroplético Interativo
+USER --> FE : Filtros (CID / Sexo / Faixa Etária)
+
+@enduml
