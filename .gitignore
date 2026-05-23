@@ -10,6 +10,11 @@ env/
 
 # Environment variables
 pipeline/.env
+backend/.env
+
+# Node.js
+node_modules/
+npm-debug.log*
 
 # IDE
 .vscode/
