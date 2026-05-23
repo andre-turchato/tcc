@@ -71,10 +71,6 @@ export default function MapaCoropletico({
     event.layer.bringToFront();
   }
 
-  function aoSairMouse(event, layerRef) {
-    layerRef.resetStyle(event.layer);
-  }
-
   function onEachFeature(feature, layer) {
     const { nome, total_atendimentos, valor_total } = feature.properties || {};
 

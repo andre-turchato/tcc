@@ -42,7 +42,7 @@ export default function App() {
   const indicadores = dadosIndicadores?.dados || null;
 
   // Verifica se a busca retornou resultado vazio
-  const semDados = buscarAtivo && !carregandoIndicadores && Array.isArray(indicadores) && indicadores.length === 0;
+  const semDados = buscarAtivo && !carregandoIndicadores && !buscandoIndicadores && Array.isArray(indicadores) && indicadores.length === 0;
 
   // Atualiza um campo específico dos filtros
   const handleFiltroChange = useCallback((campo, valor) => {
