@@ -1,0 +1,101 @@
+{
+  "type": "FeatureCollection",
+  "_comentario": "PLACEHOLDER — substitua este arquivo pela malha municipal simplificada do IBGE. Veja backend/README.md para instruções.",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo_ibge": "411850",
+        "nome": "Francisco Beltrão"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-53.05, -26.07],
+            [-52.95, -26.07],
+            [-52.95, -26.17],
+            [-53.05, -26.17],
+            [-53.05, -26.07]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo_ibge": "412020",
+        "nome": "Pato Branco"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-52.67, -26.22],
+            [-52.57, -26.22],
+            [-52.57, -26.32],
+            [-52.67, -26.32],
+            [-52.67, -26.22]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo_ibge": "410710",
+        "nome": "Dois Vizinhos"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-53.05, -25.74],
+            [-52.95, -25.74],
+            [-52.95, -25.84],
+            [-53.05, -25.84],
+            [-53.05, -25.74]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo_ibge": "412155",
+        "nome": "Realeza"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-53.52, -25.76],
+            [-53.42, -25.76],
+            [-53.42, -25.86],
+            [-53.52, -25.86],
+            [-53.52, -25.76]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo_ibge": "410180",
+        "nome": "Ampére"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-53.49, -25.90],
+            [-53.39, -25.90],
+            [-53.39, -26.00],
+            [-53.49, -26.00],
+            [-53.49, -25.90]
+          ]
+        ]
+      }
+    }
+  ]
+}

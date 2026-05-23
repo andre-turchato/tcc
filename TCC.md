@@ -82,9 +82,42 @@ python main.py --ano 2023 --mes 6
 
 > 📄 Código-fonte: [`docs/diagrams/fluxo_etl.puml`](docs/diagrams/fluxo_etl.puml)
 
-### 4.2 Fluxo de Requisição (Online)
+### 4.2 API Backend (Longevus API)
 
-Durante o uso do sistema, o fluxo de dados entre frontend, API e banco segue a sequência ilustrada abaixo:
+A camada de API foi implementada na pasta `backend/` utilizando **Node.js 20+** e o framework **Fastify**, escolhido por sua baixa latência, suporte nativo a rotas assíncronas e serialização JSON otimizada.
+
+#### 4.2.1 Endpoints implementados
+
+**`GET /api/indicadores`** (RF-06 e RF-07): Recebe os parâmetros opcionais `cid_capitulo`, `sexo` e `faixa_etaria`, valida seus valores e retorna dados agregados de internações por município no formato:
+
+```json
+{ "dados": [{ "codigo_ibge": "411850", "total_atendimentos": 1500, "valor_total": 250000.50 }] }
+```
+
+**`GET /api/geometria`** (RF-08): Serve o arquivo estático GeoJSON com a malha territorial dos municípios do Sudoeste do Paraná, adicionando o header `Cache-Control: max-age=86400` para aproveitamento de cache no cliente e em proxies intermediários.
+
+#### 4.2.2 Organização em camadas
+
+O código está organizado em quatro camadas independentes:
+
+- **Routes** — recebem a requisição HTTP e delegam para os services
+- **Services** — aplicam a lógica de negócio (validação, cache, orquestração)
+- **Repositories** — encapsulam o acesso ao banco de dados (Supabase)
+- **Lib/Utils** — módulos transversais (cliente Supabase, cache, validadores, padronização de resposta)
+
+#### 4.2.3 Cache in-memory (RF-09)
+
+Para evitar sobrecarga no banco de dados com consultas repetidas, o endpoint `/api/indicadores` implementa cache **in-memory** com a biblioteca `node-cache`. A chave de cache é composta pelos três parâmetros de filtro:
+
+```
+indicadores:{cid_capitulo}:{sexo}:{faixa_etaria}
+```
+
+O TTL padrão é de 300 segundos (5 minutos), configurável via variável de ambiente `CACHE_TTL_SECONDS`. Ao reiniciar o servidor, o cache é limpo automaticamente.
+
+#### 4.2.4 Fluxo de uma requisição
+
+O diagrama de sequência abaixo ilustra o caminho completo de uma requisição do frontend até a resposta:
 
 ![Diagrama de Sequência](docs/diagrams/renders/sequencia.png)
 
