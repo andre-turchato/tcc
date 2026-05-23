@@ -1,28 +1,41 @@
 @startuml fluxo_etl
 !theme cerulean-outline
-title Pipeline ETL — Longevus
+title Pipeline ETL — Longevus\n(main.py --ano AAAA --mes MM)
 
 start
 
-:Download dos arquivos .dbc\ndo DATASUS (SIH/SUS - Paraná);
+partition "**etl/extractor.py** (RF-01)" {
+  :Recebe parâmetros\n--ano e --mes via CLI;
 
-:Conversão .dbc → DataFrame\n(biblioteca pysus);
+  :Download do arquivo .dbc\ndo DATASUS via **pysus**\n(SIH/SUS — estado do Paraná);
 
-:Filtro: manter apenas\nmunicípios do Sudoeste do PR;
+  :Conversão .dbc → pandas.DataFrame\n(dados brutos);
+}
 
-if (Registros encontrados?) then (Sim)
-  :Criar coluna **faixa_etaria**\n(0-10, 11-20, ..., 61+);
+partition "**etl/transformer.py** (RF-02, RF-03, RF-04)" {
+  :RF-02 — Filtro por município:\nMUNIC_RES ∈ municipios_sudoeste.csv\n(42 municípios do Sudoeste do PR);
 
-  :Agrupar CID-10\npor **capítulos** (I, II, IX, X...);
+  if (Registros encontrados?) then (Sim)
+    :RF-03 — Decodificar campo IDADE\n(prefixo de unidade: dias/meses/anos)\ne criar coluna **faixa_etaria**\n(0-10 | 11-20 | 21-30 | 31-40 |\n 41-50 | 51-60 | 61+);
 
-  :Selecionar colunas:\nmunicípio, idade, sexo,\ncid_principal, cid_capitulo,\nvalor_total, competência;
+    :RF-04 — Mapear DIAG_PRINC → CID-10\npara capítulo em numeral romano\n(I a XXII) na coluna **cid_capitulo**;
 
-  :Carregar no Supabase\n(INSERT em `internacoes`);
+    :Renomear e selecionar colunas\npara esquema da tabela internacoes\n(municipio_codigo, idade, sexo,\nfaixa_etaria, cid_principal,\ncid_capitulo, valor_total,\nano_competencia, mes_competencia);
+  else (Não)
+    :Log de aviso:\nnenhum registro para o período;
+    stop
+  endif
+}
 
-  :Log de sucesso;
-else (Não)
-  :Log de aviso:\nnenhum registro encontrado;
-endif
+partition "**etl/loader.py** (RF-05)" {
+  :UPSERT na tabela\n**municipios_sudoeste**\n(ON CONFLICT DO UPDATE);
+
+  :INSERT em lotes na tabela\n**internacoes**\n(lotes de 1000 registros);
+
+  :Log de progresso\n(registros por lote e total);
+}
+
+:Pipeline finalizado\n— log com total e duração;
 
 stop
 
