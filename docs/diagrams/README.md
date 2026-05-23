@@ -30,12 +30,12 @@ java -jar plantuml.jar docs/diagrams/*.puml -o renders/
 | `sequencia.puml` | Sequência | Fluxo de requisição online (filtros → mapa) |
 | `er.puml` | Entidade-Relacionamento | Modelo de dados do banco |
 | `jornada_usuario.puml` | Swimlane | Jornada completa do profissional de saúde |
+| `componentes_frontend.puml` | Componentes | Componentes React e suas dependências |
+| `estado_filtros.puml` | Máquina de Estados | Estados dos filtros e do mapa coroplético |
 
 ---
 
 ## Diagramas a Adicionar (conforme implementação avança)
 
 - [ ] `casos_de_uso.puml` — Casos de uso do sistema
-- [ ] `componentes_frontend.puml` — Componentes React e suas relações
 - [ ] `deploy.puml` — Diagrama de implantação (Supabase + Vercel/Railway)
-- [ ] `estado_filtros.puml` — Máquina de estados dos filtros da sidebar

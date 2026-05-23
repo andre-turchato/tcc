@@ -41,6 +41,16 @@ start
 
 |Usuário|
 :Interpreta os dados\ne toma decisão;
-stop
+
+if (Deseja nova análise?) then (Sim)
+  :Altera filtros\nou clica em "Limpar Filtros";
+  |Sistema|
+  :Reseta o mapa\npara estado inicial;
+  |Usuário|
+  :Repete a análise\ncom novos parâmetros;
+  stop
+else (Não)
+  stop
+endif
 
 @enduml
