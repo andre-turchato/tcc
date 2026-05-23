@@ -133,6 +133,36 @@ O processo de criação de tabelas no Supabase utilizou o seguinte modelo:
 
 > 📄 Código-fonte: [`docs/diagrams/er.puml`](docs/diagrams/er.puml)
 
+### 4.4 Interface Web (Frontend)
+
+A interface web do Longevus foi implementada como uma *Single Page Application* (SPA) utilizando React 18 com Vite como bundler. A aplicação consome os dois endpoints da API e apresenta os dados de forma visual e interativa ao profissional de saúde.
+
+#### 4.4.1 React e Vite
+
+O React foi escolhido por sua abordagem declarativa de construção de interfaces: a UI é descrita como função dos dados, e o framework se responsabiliza por atualizar o DOM de forma eficiente quando os dados mudam. O Vite oferece servidor de desenvolvimento com *Hot Module Replacement* (HMR) instantâneo e build otimizado via Rollup.
+
+#### 4.4.2 Leaflet e Mapa Coroplético
+
+O Leaflet é a principal biblioteca JavaScript para mapas interativos. Em conjunto com a camada `react-leaflet`, a geometria dos municípios retornada pelo endpoint `GET /api/geometria` é renderizada como um `GeoJSON` com estilo dinâmico. Cada município recebe uma cor proporcional ao seu `total_atendimentos` dentro de uma escala de cinco níveis, do amarelo (`#ffffb2`) ao vermelho escuro (`#bd0026`), implementada no utilitário `colorScale.js`. Municípios sem dados são exibidos em cinza neutro. Ao passar o mouse sobre um município, um tooltip exibe o nome, o total de atendimentos e o valor total em BRL.
+
+#### 4.4.3 TanStack Query
+
+O TanStack Query (React Query) é responsável pelo gerenciamento do ciclo de vida de todas as requisições HTTP. O hook `useGeometria` carrega o GeoJSON ao iniciar a aplicação, com cache de 1 hora no cliente. O hook `useIndicadores` é habilitado somente após o usuário clicar em "Atualizar Mapa", evitando requisições desnecessárias. A biblioteca gerencia automaticamente os estados de `loading`, `error` e `success`, que são repassados aos componentes visuais de feedback (`EstadoCarregamento`).
+
+#### 4.4.4 Fluxo de Interação
+
+O diagrama de estados abaixo descreve o comportamento da aplicação conforme o usuário interage com os filtros:
+
+![Diagrama de Estados dos Filtros](docs/diagrams/renders/estado_filtros.png)
+
+> 📄 Código-fonte: [`docs/diagrams/estado_filtros.puml`](docs/diagrams/estado_filtros.puml)
+
+A estrutura de componentes do frontend é apresentada no diagrama a seguir:
+
+![Diagrama de Componentes do Frontend](docs/diagrams/renders/componentes_frontend.png)
+
+> 📄 Código-fonte: [`docs/diagrams/componentes_frontend.puml`](docs/diagrams/componentes_frontend.puml)
+
 ---
 
 ## 5 Jornada do Usuário

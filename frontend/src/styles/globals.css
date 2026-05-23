@@ -1,0 +1,353 @@
+/* ============================================================
+   globals.css — Estilos globais do sistema Longevus
+   ============================================================ */
+
+/* Reset básico */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 14px;
+  color: #222;
+  background-color: #f5f5f5;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ============================================================
+   Layout principal
+   ============================================================ */
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-header {
+  background-color: #1a5276;
+  color: #fff;
+  padding: 10px 20px;
+  flex-shrink: 0;
+}
+
+.app-header h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.app-header p {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+.app-conteudo {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.app-mapa {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ============================================================
+   Sidebar
+   ============================================================ */
+
+.sidebar {
+  width: 280px;
+  background: #fff;
+  border-right: 1px solid #ddd;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-titulo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a5276;
+  border-bottom: 2px solid #1a5276;
+  padding-bottom: 6px;
+}
+
+.filtro-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filtro-label {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.filtro-select {
+  padding: 7px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  background: #fafafa;
+  cursor: pointer;
+  color: #222;
+}
+
+.filtro-select:focus {
+  outline: none;
+  border-color: #1a5276;
+  background: #fff;
+}
+
+.sidebar-acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.btn {
+  padding: 9px 14px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, background-color 0.15s;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primario {
+  background-color: #1a5276;
+  color: #fff;
+}
+
+.btn-primario:hover:not(:disabled) {
+  background-color: #154360;
+}
+
+.btn-secundario {
+  background-color: #e8e8e8;
+  color: #444;
+}
+
+.btn-secundario:hover:not(:disabled) {
+  background-color: #d5d5d5;
+}
+
+.sidebar-info {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid #eee;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   Mapa
+   ============================================================ */
+
+.mapa-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.mapa-container .leaflet-container {
+  height: 100%;
+  width: 100%;
+}
+
+/* Overlay durante carregamento de indicadores */
+.mapa-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.65);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Aviso de nenhum dado */
+.mapa-aviso {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  color: #856404;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  z-index: 900;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   Legenda do mapa
+   ============================================================ */
+
+.legenda-mapa {
+  position: absolute;
+  bottom: 30px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px 14px;
+  z-index: 800;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  min-width: 140px;
+}
+
+.legenda-titulo {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.legenda-lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.legenda-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legenda-cor {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.legenda-rotulo {
+  font-size: 0.78rem;
+  color: #444;
+}
+
+/* ============================================================
+   Tooltip do mapa
+   ============================================================ */
+
+.tooltip-info {
+  min-width: 160px;
+}
+
+.tooltip-municipio {
+  display: block;
+  font-size: 0.9rem;
+  color: #1a5276;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 4px;
+}
+
+.tooltip-tabela {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tooltip-tabela td {
+  padding: 2px 6px 2px 0;
+  font-size: 0.82rem;
+  color: #333;
+}
+
+.tooltip-tabela td:first-child {
+  color: #777;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   Estados de carregamento / erro / vazio
+   ============================================================ */
+
+.estado-carregamento {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.estado-erro {
+  color: #c0392b;
+}
+
+.estado-vazio {
+  color: #7f8c8d;
+}
+
+.icone-estado {
+  font-size: 2rem;
+}
+
+/* Spinner de carregamento */
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 4px solid #d6eaf8;
+  border-top-color: #1a5276;
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   Responsividade básica
+   ============================================================ */
+
+@media (max-width: 640px) {
+  .app-conteudo {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    max-height: 40vh;
+  }
+}

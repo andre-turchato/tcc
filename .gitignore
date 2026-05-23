@@ -11,6 +11,7 @@ env/
 # Environment variables
 pipeline/.env
 backend/.env
+frontend/.env
 
 # Node.js
 node_modules/
@@ -22,3 +23,8 @@ npm-debug.log*
 
 # OS
 .DS_Store
+
+# Frontend build artifacts
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/

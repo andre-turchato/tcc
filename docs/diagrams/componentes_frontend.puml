@@ -1,0 +1,56 @@
+@startuml componentes_frontend
+!theme cerulean-outline
+title Componentes do Frontend — Longevus
+
+package "frontend/src" {
+
+  package "Componentes" {
+    [App] as App
+    [Sidebar] as Sidebar
+    [MapaCoropletico] as Mapa
+    [LegendaMapa] as Legenda
+    [TooltipInfo] as Tooltip
+    [EstadoCarregamento] as Estado
+  }
+
+  package "Hooks (TanStack Query)" {
+    [useGeometria] as HookGeo
+    [useIndicadores] as HookInd
+  }
+
+  package "Serviços" {
+    [api.js\nbuscarGeometria()\nbuscarIndicadores()] as API
+  }
+
+  package "Utilitários" {
+    [colorScale.js] as Colors
+    [formatters.js] as Fmt
+    [mergeGeoData.js] as Merge
+  }
+
+  package "Constantes" {
+    [filtros.js] as Filtros
+  }
+}
+
+cloud "API Backend\n(Fastify)" as Backend
+
+App --> Sidebar : filtros
+App --> Mapa : geojson + indicadores
+App --> HookGeo : usa
+App --> HookInd : usa
+
+Mapa --> Legenda : maximo
+Mapa --> Tooltip : via Leaflet tooltip
+Mapa --> Estado : carregando/erro/vazio
+Mapa --> Colors : calcularCor()
+Mapa --> Merge : combinarDadosGeo()
+
+Sidebar --> Filtros : OPCOES_*
+
+HookGeo --> API : buscarGeometria()
+HookInd --> API : buscarIndicadores(filtros)
+
+API --> Backend : GET /api/geometria\nGET /api/indicadores
+
+@enduml

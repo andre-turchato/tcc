@@ -1,0 +1,53 @@
+@startuml estado_filtros
+!theme cerulean-outline
+title Máquina de Estados — Filtros e Mapa
+
+[*] --> Inicial : aplicação carregada
+
+state Inicial {
+  state "GeoJSON carregado" as GeoOk
+  state "Mapa renderizado\n(sem indicadores)" as MapaVazio
+  GeoOk --> MapaVazio
+}
+
+Inicial --> SelecionandoFiltros : usuário interage\ncom os selects
+
+state SelecionandoFiltros {
+  state "CID-10 alterado" as CID
+  state "Sexo alterado" as Sexo
+  state "Faixa Etária alterada" as FaixaEtaria
+}
+
+SelecionandoFiltros --> Buscando : clica em\n"Atualizar Mapa"
+
+state Buscando {
+  state "GET /api/indicadores\n(query params)" as Req
+}
+
+Buscando --> MapaAtualizado : resposta 200 com dados
+Buscando --> SemDados : resposta 200 com dados: []
+Buscando --> ErroAPI : erro de rede\nou status != 200
+
+state MapaAtualizado {
+  state "Indicadores combinados\ncom GeoJSON" as Combinados
+  state "Mapa recolorido\n(amarelo → vermelho)" as Recolorido
+  Combinados --> Recolorido
+}
+
+MapaAtualizado --> SelecionandoFiltros : usuário altera\nfiltros novamente
+
+state SemDados {
+  state "Municípios neutros\n(cinza)" as Neutros
+  state "Aviso exibido:\n\"Nenhum dado encontrado\"" as Aviso
+}
+
+state ErroAPI {
+  state "Mensagem de erro\namigável exibida" as ErroMsg
+}
+
+SemDados --> SelecionandoFiltros : usuário altera\nfiltros
+ErroAPI --> SelecionandoFiltros : usuário tenta\nnovamente
+
+SelecionandoFiltros --> Inicial : clica em\n"Limpar Filtros"
+
+@enduml
