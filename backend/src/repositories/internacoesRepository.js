@@ -20,13 +20,36 @@ const supabase = require('../lib/supabase');
  *     AND (faixa_etaria = :faixa_etaria OR :faixa_etaria IS NULL)
  *   GROUP BY municipio_codigo;
  *
+ * A função RPC `agregar_internacoes` deve ser criada no Supabase com a seguinte assinatura:
+ *
+ *   CREATE OR REPLACE FUNCTION agregar_internacoes(
+ *     p_cid_capitulo  TEXT DEFAULT NULL,
+ *     p_sexo          TEXT DEFAULT NULL,
+ *     p_faixa_etaria  TEXT DEFAULT NULL
+ *   )
+ *   RETURNS TABLE (
+ *     codigo_ibge        TEXT,
+ *     total_atendimentos BIGINT,
+ *     valor_total        NUMERIC
+ *   )
+ *   LANGUAGE sql
+ *   AS $$
+ *     SELECT
+ *       i.municipio_codigo  AS codigo_ibge,
+ *       COUNT(*)            AS total_atendimentos,
+ *       SUM(i.valor_total)  AS valor_total
+ *     FROM internacoes i
+ *     WHERE i.municipio_codigo IN (SELECT codigo_ibge FROM municipios_sudoeste)
+ *       AND (i.cid_capitulo  = p_cid_capitulo  OR p_cid_capitulo  IS NULL)
+ *       AND (i.sexo          = p_sexo          OR p_sexo          IS NULL)
+ *       AND (i.faixa_etaria  = p_faixa_etaria  OR p_faixa_etaria  IS NULL)
+ *     GROUP BY i.municipio_codigo;
+ *   $$;
+ *
  * @param {{ cid_capitulo?: string, sexo?: string, faixa_etaria?: string }} filtros
  * @returns {Promise<Array<{ codigo_ibge: string, total_atendimentos: number, valor_total: number }>>}
  */
 async function buscarAgregadoPorMunicipio({ cid_capitulo, sexo, faixa_etaria } = {}) {
-  // Utiliza a função RPC `agregar_internacoes` definida no Supabase,
-  // que encapsula a query de agregação com filtros dinâmicos.
-  // Caso prefira, pode ser substituída por uma query SQL direta via pg.
   const { data, error } = await supabase.rpc('agregar_internacoes', {
     p_cid_capitulo:  cid_capitulo  || null,
     p_sexo:          sexo          || null,

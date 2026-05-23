@@ -202,6 +202,21 @@ src/
 
 ---
 
+## Banco de dados — função RPC
+
+O endpoint `/api/indicadores` utiliza a função SQL `agregar_internacoes` no Supabase.  
+Execute o script de migração **antes de iniciar a API**:
+
+```bash
+# Via SQL Editor do Supabase (cole o conteúdo de sql/agregar_internacoes.sql)
+# ou via psql:
+psql "$DATABASE_URL" -f sql/agregar_internacoes.sql
+```
+
+O arquivo `sql/agregar_internacoes.sql` contém a definição completa da função.
+
+---
+
 ## Health check
 
 ```bash
