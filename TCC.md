@@ -28,6 +28,8 @@ Nesse contexto, a engenharia de software desempenha papel fundamental ao viabili
 
 Diante disso, este trabalho propõe a análise de dados abertos do SUS com foco no Sudoeste do Paraná, buscando identificar padrões de utilização dos serviços de saúde pública, o perfil dos usuários, os principais motivos de busca e os valores financeiros associados aos atendimentos.
 
+Além do aspecto analítico, o projeto também se insere no campo da engenharia de software por envolver levantamento de requisitos, definição arquitetural, modularização, tratamento de requisitos não funcionais e construção de uma solução orientada à manutenção e evolução. Dessa forma, o trabalho não se restringe ao processamento de dados, mas também à concepção de um sistema de software capaz de entregar confiabilidade, desempenho e usabilidade para o contexto de apoio à saúde pública.
+
 ### 1.1 Objetivo Geral
 
 Desenvolver uma plataforma de análise geoespacial capaz de extrair, transformar, armazenar e visualizar dados públicos de internações hospitalares do SUS, permitindo a identificação de padrões territoriais de utilização dos serviços de saúde no Sudoeste do Paraná.
@@ -58,6 +60,8 @@ A engenharia de software aplicada à análise de dados públicos envolve a defin
 
 O uso de sistemas de informações geográficas (SIG) possibilita a geração de mapas dinâmicos, os quais facilitam a interpretação dos dados e a identificação de padrões territoriais, por parte dos profissionais de saúde. A aplicação de filtros por CID, sexo e faixa etária permite análises segmentadas, evidenciando diferentes comportamentos sociais no uso dos serviços de saúde.
 
+Sob a ótica da engenharia de software, a solução também exigiu a definição clara de responsabilidades entre componentes, padronização de contratos de comunicação e adoção de critérios de qualidade para garantir evolução sustentável. Em sistemas orientados a dados, decisões como granularidade dos módulos, validação de entradas, desempenho das consultas e clareza da interface impactam diretamente a utilidade do produto final. Por isso, o desenvolvimento do Longevus foi conduzido considerando não apenas a entrega funcional, mas também atributos de qualidade como manutenibilidade, desempenho, modularidade e usabilidade.
+
 ### 3.1 Arquitetura do Sistema
 
 O sistema Longevus é composto por três camadas principais, conforme ilustrado no diagrama abaixo:
@@ -67,6 +71,18 @@ O sistema Longevus é composto por três camadas principais, conforme ilustrado 
 > 📄 Código-fonte: [`docs/diagrams/arquitetura.puml`](docs/diagrams/arquitetura.puml)
 
 A separação em camadas garante que cada componente evolua de forma independente, facilitando a manutenção e testabilidade do sistema.
+
+### 3.2 Engenharia de Requisitos
+
+O desenvolvimento do sistema foi orientado por requisitos funcionais e não funcionais previamente definidos. Os requisitos funcionais descrevem as capacidades centrais da solução, como extrair dados do SIH/SUS, filtrar municípios do Sudoeste do Paraná, agrupar registros por faixa etária e capítulo CID-10, expor endpoints de consulta e renderizar um mapa interativo com filtros. Já os requisitos não funcionais estabelecem critérios de qualidade, incluindo desempenho da renderização, leveza do GeoJSON, usabilidade da interface e manutenibilidade da arquitetura.
+
+Essa distinção foi essencial para evitar que o projeto se limitasse à implementação de funcionalidades isoladas. Ao considerar requisitos não funcionais desde a concepção, tornou-se possível justificar decisões como o uso de cache na API, a simplificação da geometria territorial, a separação em camadas e a escolha de uma interface orientada a usuários com baixa afinidade técnica. Assim, a engenharia de requisitos contribuiu para alinhar a solução técnica às necessidades reais de uso.
+
+### 3.3 Qualidade de Software e Manutenibilidade
+
+Entre os principais atributos de qualidade considerados no trabalho, destacam-se a modularidade, a escalabilidade evolutiva, a manutenibilidade e a confiabilidade da interação entre componentes. A modularidade é observada na separação entre pipeline ETL, backend e frontend, permitindo que alterações em uma camada tenham impacto reduzido nas demais. A manutenibilidade é reforçada pela organização em rotas, serviços, repositórios e utilitários, o que facilita localização de responsabilidades e evolução incremental do código.
+
+O projeto também contempla preocupações com desempenho e eficiência operacional. O uso de agregação no banco, cache in-memory e respostas enxutas em JSON reduz o custo de processamento e melhora o tempo de resposta percebido pelo usuário. Além disso, a definição explícita de contratos de entrada e saída na API reduz ambiguidades de integração, fortalecendo a confiabilidade da comunicação entre frontend e backend.
 
 ---
 
@@ -143,6 +159,12 @@ O diagrama de sequência abaixo ilustra o caminho completo de uma requisição d
 
 > 📄 Código-fonte: [`docs/diagrams/sequencia.puml`](docs/diagrams/sequencia.puml)
 
+#### 4.2.5 Contratos, Validação e Coesão da API
+
+Do ponto de vista da engenharia de software, a API exerce papel de fronteira contratual entre os componentes do sistema. Os parâmetros `cid_capitulo`, `sexo` e `faixa_etaria` são validados antes do processamento, reduzindo a propagação de erros para as camadas internas e aumentando a previsibilidade das respostas. A padronização do formato de saída também simplifica a integração com o frontend, tornando a comunicação mais estável e de menor acoplamento.
+
+A organização em rotas, serviços, repositórios e utilitários reforça a coesão interna dos módulos. Cada camada possui uma responsabilidade bem definida: receber a requisição, aplicar regras de negócio, acessar os dados e estruturar a resposta. Esse arranjo favorece reuso, facilita manutenção corretiva e evolutiva e reduz a complexidade cognitiva associada ao sistema.
+
 ### 4.3 Modelo de Dados
 
 A geração dos mapas dinâmicos foi realizada por meio da aplicação de filtros por CID, sexo e faixa etária, possibilitando a visualização da concentração dos atendimentos e dos valores financeiros por município.
@@ -183,6 +205,12 @@ A estrutura de componentes do frontend é apresentada no diagrama a seguir:
 
 > 📄 Código-fonte: [`docs/diagrams/componentes_frontend.puml`](docs/diagrams/componentes_frontend.puml)
 
+#### 4.4.5 Usabilidade e Organização da Interface
+
+A interface foi concebida considerando princípios de usabilidade aplicados à engenharia de software, especialmente simplicidade de navegação, redução de carga cognitiva e clareza na apresentação do estado do sistema. A presença de filtros explícitos, botão de atualização e mensagens de carregamento ou erro contribui para que o usuário compreenda o comportamento da aplicação sem necessidade de conhecimento técnico sobre banco de dados ou APIs.
+
+Também há uma preocupação com organização interna do frontend, expressa na separação entre componentes visuais, hooks de acesso a dados, constantes e utilitários. Essa estrutura melhora a legibilidade do projeto e favorece manutenção futura, permitindo ajustes em regras de negócio, visualização ou integração sem necessidade de reescrever a aplicação como um todo.
+
 ---
 
 ## 5 Jornada do Usuário
@@ -211,6 +239,10 @@ Na camada de serviços, a API backend centraliza as regras de validação e agre
 
 Na camada de apresentação, a interface web entrega o resultado analítico de forma visual. O uso de mapa coroplético com tooltip e filtros combinados permite observar diferenças territoriais entre municípios, identificar concentrações de atendimentos e explorar recortes específicos por perfil populacional. Com isso, o sistema amplia o potencial de uso dos dados por gestores e profissionais da saúde no apoio à leitura exploratória do território.
 
+Em termos de engenharia de software, o trabalho também evidencia a aplicação prática de conceitos como arquitetura em camadas, encapsulamento de responsabilidades, contrato entre serviços, tratamento de requisitos não funcionais e preocupação com experiência do usuário. A solução não foi desenvolvida apenas para funcionar, mas para ser compreensível, adaptável e passível de evolução. Isso é particularmente relevante em sistemas acadêmicos e institucionais, nos quais futuras extensões dependem da clareza da base arquitetural já estabelecida.
+
+Outro ponto importante é que o projeto demonstra como especificação e implementação podem caminhar juntas. A explicitação dos requisitos funcionais e não funcionais permitiu avaliar se a solução proposta atendia a metas objetivas de desempenho, estrutura e usabilidade. Dessa forma, o trabalho se aproxima de uma abordagem mais disciplinada de desenvolvimento, em que decisões técnicas são justificadas por requisitos e atributos de qualidade, e não apenas por conveniência de implementação.
+
 ### 6.3 Limitações Observadas
 
 Embora o trabalho não substitua análises epidemiológicas aprofundadas, ele fornece uma base tecnológica sólida para investigação inicial de padrões espaciais. Entre as limitações observadas, destacam-se a dependência da atualização periódica das bases do DATASUS, a qualidade dos registros administrativos de origem e a necessidade de evolução contínua da base cartográfica e dos indicadores analíticos disponíveis.
@@ -229,8 +261,10 @@ Como continuidade, o trabalho pode evoluir com a incorporação de séries hist�
 
 ## Referências
 
+- BASS, L.; CLEMENTS, P.; KAZMAN, R. *Software Architecture in Practice*. 4. ed. Boston: Addison-Wesley, 2021.
 - BRASIL. Ministério da Saúde. DATASUS – Departamento de Informática do SUS. Disponível em: https://datasus.saude.gov.br.
 - BRASIL. Lei nº 8.080, de 19 de setembro de 1990. Dispõe sobre as condições para a promoção, proteção e recuperação da saúde.
 - IBGE – Instituto Brasileiro de Geografia e Estatística. Bases cartográficas municipais. Disponível em: https://www.ibge.gov.br.
 - KITCHIN, R. *The Data Revolution: Big Data, Open Data, Data Infrastructures and Their Consequences*. London: Sage, 2014.
 - PRESSMAN, R. S.; MAXIM, B. R. *Engenharia de Software: Uma Abordagem Profissional*. Porto Alegre: McGraw-Hill, 2016.
+- SOMMERVILLE, I. *Engenharia de Software*. 10. ed. São Paulo: Pearson, 2019.
