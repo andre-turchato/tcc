@@ -12,7 +12,9 @@ Este trabalho apresenta uma análise geoespacial dos padrões de utilização do
 
 ## Abstract
 
-This work presents a geospatial analysis of public health service usage patterns in the Southwest region of Paraná, Brazil, using open data from the Unified Health System (SUS). The study aims to identify user profiles, the main reasons for hospital admissions, and the associated financial values through dynamic filtering by International Classification of Diseases (ICD), sex, and age group. To achieve this, software engineering techniques for data extraction, transformation, and analysis were combined with geoprocessing resources for the generation of dynamic maps. The resulting platform supports territorial interpretation of hospital admission patterns and contributes to data-driven decision-making in public health.
+This work presents a geospatial analysis of public health service usage patterns in the Southwest region of Paraná, Brazil, using open data from the Unified Health System (SUS). The study aims to identify user profiles, the main reasons for hospital admissions, and the associated financial values through dynamic filtering by International Classification of Diseases (ICD), sex, and age group.
+
+To achieve this, software engineering techniques for data extraction, transformation, and analysis were combined with geoprocessing resources for the generation of dynamic maps. The resulting platform supports territorial interpretation of hospital admission patterns and contributes to data-driven decision-making in public health.
 
 **Keywords:** public health; open data; software engineering; geospatial analysis; SUS.
 
@@ -195,15 +197,21 @@ O sistema foi projetado para profissionais de saúde com baixa afinidade técnic
 
 ## 6 Resultados e Discussão
 
+### 6.1 Implementação da Plataforma
+
 O principal resultado deste trabalho foi a implementação funcional da plataforma Longevus, composta por pipeline ETL em Python, banco de dados PostgreSQL/PostGIS no Supabase, API REST em Node.js/Fastify e frontend web em React com mapa coroplético. A solução construída materializa, em um único fluxo, todas as etapas necessárias para transformar dados públicos brutos em visualizações analíticas acessíveis.
 
 Do ponto de vista da engenharia de software, o trabalho demonstrou a viabilidade da separação em camadas, permitindo que coleta, processamento, disponibilização e visualização dos dados fossem desenvolvidos de forma modular. Essa organização favoreceu manutenção, evolução incremental e reaproveitamento dos componentes, além de permitir que a lógica analítica permanecesse desacoplada da interface de usuário.
+
+### 6.2 Contribuições Técnicas
 
 Na camada de dados, o pipeline implementado automatiza a obtenção dos arquivos do DATASUS, filtra os municípios de interesse e padroniza variáveis importantes para análise, como faixa etária e capítulo CID-10. Essa etapa reduz o esforço manual necessário para preparar bases públicas, além de tornar o processo reproduzível para novas competências mensais.
 
 Na camada de serviços, a API backend centraliza as regras de validação e agregação, expondo consultas simplificadas para o frontend. A adoção de cache in-memory para o endpoint de indicadores reduz consultas repetidas ao banco e melhora a responsividade percebida pelo usuário durante a exploração dos filtros.
 
 Na camada de apresentação, a interface web entrega o resultado analítico de forma visual. O uso de mapa coroplético com tooltip e filtros combinados permite observar diferenças territoriais entre municípios, identificar concentrações de atendimentos e explorar recortes específicos por perfil populacional. Com isso, o sistema amplia o potencial de uso dos dados por gestores e profissionais da saúde no apoio à leitura exploratória do território.
+
+### 6.3 Limitações Observadas
 
 Embora o trabalho não substitua análises epidemiológicas aprofundadas, ele fornece uma base tecnológica sólida para investigação inicial de padrões espaciais. Entre as limitações observadas, destacam-se a dependência da atualização periódica das bases do DATASUS, a qualidade dos registros administrativos de origem e a necessidade de evolução contínua da base cartográfica e dos indicadores analíticos disponíveis.
 
