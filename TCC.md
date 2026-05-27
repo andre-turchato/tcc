@@ -10,6 +10,12 @@ Este trabalho apresenta uma análise geoespacial dos padrões de utilização do
 
 **Palavras-chave:** saúde pública; dados abertos; engenharia de software; análise geoespacial; SUS.
 
+## Abstract
+
+This work presents a geospatial analysis of public health service usage patterns in the Southwest region of Paraná, Brazil, using open data from the Unified Health System (SUS). The study aims to identify user profiles, the main reasons for hospital admissions, and the associated financial values through dynamic filtering by International Classification of Diseases (ICD), sex, and age group. To achieve this, software engineering techniques for data extraction, transformation and analysis were combined with geoprocessing resources for the generation of dynamic maps. The resulting platform supports territorial interpretation of hospital admission patterns and contributes to data-driven decision-making in public health.
+
+**Keywords:** public health; open data; software engineering; geospatial analysis; SUS.
+
 ---
 
 ## 1 Introdução
@@ -19,6 +25,18 @@ O Sistema Único de Saúde (SUS), é uma das principais políticas públicas bra
 Nesse contexto, a engenharia de software desempenha papel fundamental ao viabilizar a extração, o tratamento e a análise de grandes volumes de dados públicos, permitindo transformar dados brutos em informações relevantes para um público que geralmente tem baixa afinidade com bases de dados. A utilização de técnicas de análise geoespacial potencializa esse processo ao possibilitar a visualização territorial dos fenômenos estudados de maneira mais acessível.
 
 Diante disso, este trabalho propõe a análise de dados abertos do SUS com foco no Sudoeste do Paraná, buscando identificar padrões de utilização dos serviços de saúde pública, o perfil dos usuários, os principais motivos de busca e os valores financeiros associados aos atendimentos.
+
+### 1.1 Objetivo Geral
+
+Desenvolver uma plataforma de análise geoespacial capaz de extrair, transformar, armazenar e visualizar dados públicos de internações hospitalares do SUS, permitindo a identificação de padrões territoriais de utilização dos serviços de saúde no Sudoeste do Paraná.
+
+### 1.2 Objetivos Específicos
+
+- estruturar um pipeline ETL para obtenção e tratamento dos dados do SIH/SUS;
+- consolidar os dados em banco relacional com suporte geoespacial;
+- disponibilizar uma API para consulta agregada por município;
+- implementar uma interface web interativa com filtros por capítulo CID-10, sexo e faixa etária;
+- apoiar a interpretação dos dados por profissionais de saúde com baixa afinidade técnica.
 
 ---
 
@@ -172,6 +190,32 @@ O sistema foi projetado para profissionais de saúde com baixa afinidade técnic
 ![Jornada do Usuário](docs/diagrams/renders/jornada_usuario.png)
 
 > 📄 Código-fonte: [`docs/diagrams/jornada_usuario.puml`](docs/diagrams/jornada_usuario.puml)
+
+---
+
+## 6 Resultados e Discussão
+
+O principal resultado deste trabalho foi a implementação funcional da plataforma Longevus, composta por pipeline ETL em Python, banco de dados PostgreSQL/PostGIS no Supabase, API REST em Node.js/Fastify e frontend web em React com mapa coroplético. A solução construída materializa, em um único fluxo, todas as etapas necessárias para transformar dados públicos brutos em visualizações analíticas acessíveis.
+
+Do ponto de vista da engenharia de software, o trabalho demonstrou a viabilidade da separação em camadas, permitindo que coleta, processamento, disponibilização e visualização dos dados fossem desenvolvidos de forma modular. Essa organização favoreceu manutenção, evolução incremental e reaproveitamento dos componentes, além de permitir que a lógica analítica permanecesse desacoplada da interface de usuário.
+
+Na camada de dados, o pipeline implementado automatiza a obtenção dos arquivos do DATASUS, filtra os municípios de interesse e padroniza variáveis importantes para análise, como faixa etária e capítulo CID-10. Essa etapa reduz o esforço manual necessário para preparar bases públicas, além de tornar o processo reproduzível para novas competências mensais.
+
+Na camada de serviços, a API backend centraliza as regras de validação e agregação, expondo consultas simplificadas para o frontend. A adoção de cache in-memory para o endpoint de indicadores reduz consultas repetidas ao banco e melhora a responsividade percebida pelo usuário durante a exploração dos filtros.
+
+Na camada de apresentação, a interface web entrega o resultado analítico de forma visual. O uso de mapa coroplético com tooltip e filtros combinados permite observar diferenças territoriais entre municípios, identificar concentrações de atendimentos e explorar recortes específicos por perfil populacional. Com isso, o sistema amplia o potencial de uso dos dados por gestores e profissionais da saúde no apoio à leitura exploratória do território.
+
+Embora o trabalho não substitua análises epidemiológicas aprofundadas, ele fornece uma base tecnológica sólida para investigação inicial de padrões espaciais. Entre as limitações observadas, destacam-se a dependência da atualização periódica das bases do DATASUS, a qualidade dos registros administrativos de origem e a necessidade de evolução contínua da base cartográfica e dos indicadores analíticos disponíveis.
+
+---
+
+## 7 Considerações Finais
+
+Este trabalho evidenciou que a combinação entre dados abertos, engenharia de software e análise geoespacial pode produzir instrumentos relevantes para a compreensão do uso dos serviços públicos de saúde. Ao integrar ETL, armazenamento estruturado, API e visualização interativa, o sistema Longevus transforma uma base de dados complexa em uma ferramenta mais acessível para consulta e interpretação.
+
+Como contribuição prática, o projeto entrega uma aplicação que permite filtrar e visualizar internações hospitalares do SUS no Sudoeste do Paraná sob diferentes recortes analíticos. Como contribuição acadêmica, demonstra uma aplicação concreta de conceitos de engenharia de software, arquitetura em camadas, processamento de dados e geotecnologias em um problema real de interesse público.
+
+Como continuidade, o trabalho pode evoluir com a incorporação de séries históricas, novos indicadores epidemiológicos, exportação de relatórios, autenticação de perfis institucionais e ampliação do recorte geográfico. Ainda assim, a versão atual já estabelece uma base consistente para futuras pesquisas e para apoio a processos de tomada de decisão orientados por dados.
 
 ---
 
