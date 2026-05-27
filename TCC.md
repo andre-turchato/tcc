@@ -12,7 +12,7 @@ Este trabalho apresenta uma análise geoespacial dos padrões de utilização do
 
 ## Abstract
 
-This work presents a geospatial analysis of public health service usage patterns in the Southwest region of Paraná, Brazil, using open data from the Unified Health System (SUS). The study aims to identify user profiles, the main reasons for hospital admissions, and the associated financial values through dynamic filtering by International Classification of Diseases (ICD), sex, and age group. To achieve this, software engineering techniques for data extraction, transformation and analysis were combined with geoprocessing resources for the generation of dynamic maps. The resulting platform supports territorial interpretation of hospital admission patterns and contributes to data-driven decision-making in public health.
+This work presents a geospatial analysis of public health service usage patterns in the Southwest region of Paraná, Brazil, using open data from the Unified Health System (SUS). The study aims to identify user profiles, the main reasons for hospital admissions, and the associated financial values through dynamic filtering by International Classification of Diseases (ICD), sex, and age group. To achieve this, software engineering techniques for data extraction, transformation, and analysis were combined with geoprocessing resources for the generation of dynamic maps. The resulting platform supports territorial interpretation of hospital admission patterns and contributes to data-driven decision-making in public health.
 
 **Keywords:** public health; open data; software engineering; geospatial analysis; SUS.
 
@@ -32,11 +32,11 @@ Desenvolver uma plataforma de análise geoespacial capaz de extrair, transformar
 
 ### 1.2 Objetivos Específicos
 
-- estruturar um pipeline ETL para obtenção e tratamento dos dados do SIH/SUS;
-- consolidar os dados em banco relacional com suporte geoespacial;
-- disponibilizar uma API para consulta agregada por município;
-- implementar uma interface web interativa com filtros por capítulo CID-10, sexo e faixa etária;
-- apoiar a interpretação dos dados por profissionais de saúde com baixa afinidade técnica.
+- Estruturar um pipeline ETL para obtenção e tratamento dos dados do SIH/SUS;
+- Consolidar os dados em banco relacional com suporte geoespacial;
+- Disponibilizar uma API para consulta agregada por município;
+- Implementar uma interface web interativa com filtros por capítulo CID-10, sexo e faixa etária;
+- Apoiar a interpretação dos dados por profissionais de saúde com baixa afinidade técnica.
 
 ---
 
